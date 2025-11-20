@@ -1,0 +1,95 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: giada
+      changes:
+        - createTable:
+            tableName: "user"
+            remarks: "Tabella che gestisce gli utenti dell'applicativo"
+            columns:
+              - column:
+                  name: id
+                  type: SERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: active
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+
+        - createTable:
+            tableName: "role"
+            remarks: "Tabella contenente i ruoli assegnabili agli utenti"
+            columns:
+              - column:
+                  name: id
+                  type: SERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+        - createTable:
+            tableName: "user_role"
+            remarks: "Tabella di associazione tra utenti e ruoli"
+            columns:
+              - column:
+                  name: user_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role_id
+                  type: INT
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: "user_role"
+            baseColumnNames: user_id
+            referencedTableName: "user"
+            referencedColumnNames: id
+            onDelete: CASCADE
+            constraintName: fk_user_role_user
+
+        - addForeignKeyConstraint:
+            baseTableName: "user_role"
+            baseColumnNames: role_id
+            referencedTableName: "role"
+            referencedColumnNames: id
+            onDelete: CASCADE
+            constraintName: fk_user_role_role
+
+      rollback:
+        - dropTable:
+            tableName: "user_role"
+        - dropTable:
+            tableName: "role"
+        - dropTable:
+            tableName: "user"

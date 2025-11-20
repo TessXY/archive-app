@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/db.changelog-001-grants.yaml
+  - include:
+      file: db/changelog/db.changelog-002-create-user-role-structure.yaml
+  - include:
+      file: db/changelog/db.changelog-003-insert-roles.yaml
+  - include:
+      file: db/changelog/db.changelog-004-insert-users.yaml

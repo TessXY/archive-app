@@ -1,0 +1,78 @@
+databaseChangeLog:
+  - changeSet:
+      id: 4
+      author: giada
+      changes:
+        # INSERIMENTO UTENTI
+        - insert:
+            tableName: "user"
+            columns:
+              - column:
+                  name: username
+                  value: "admin"
+              - column:
+                  name: email
+                  value: "admin@example.com"
+              - column:
+                  name: password
+                  value: "pbkdf2_sha256$210000$0LCr4AvvKzevb2Z8KiGgpA==$XE4/XhQXmwFbpQoqYMN/YXYuYe4KpfVQUXp19MOZ3Fo="
+        - insert:
+            tableName: "user"
+            columns:
+              - column:
+                  name: username
+                  value: "giada"
+              - column:
+                  name: email
+                  value: "giada1603@gmail.com"
+              - column:
+                  name: password
+                  value: "pbkdf2_sha256$210000$+9KlhPLdFs9OpY9quxXi4g==$wxoqvAh1nGseYeAiYqa2SK+THbyLqtiGLFnjLtxfRvw="
+        - insert:
+            tableName: "user"
+            columns:
+              - column:
+                  name: username
+                  value: "alessio"
+              - column:
+                  name: email
+                  value: "alessio.blasi92@gmail.com"
+              - column:
+                  name: password
+                  value: "pbkdf2_sha256$210000$M38UZOQq8Wc+qrX9lShSuQ==$70vQ61GwdvvBDz2MrwUrKvUSF9c1zvGhcyRxHKqadkk="
+        # ASSOCIAZIONE UTENTI AI RUOLI
+        - insert:
+            tableName: user_role
+            columns:
+              - column:
+                  name: user_id
+                  valueComputed: "(SELECT id FROM \"user\" WHERE email = 'admin@example.com')"
+              - column:
+                  name: role_id
+                  valueComputed: "(SELECT id FROM role WHERE name = 'ADMIN')"
+        - insert:
+            tableName: user_role
+            columns:
+              - column:
+                  name: user_id
+                  valueComputed: "(SELECT id FROM \"user\" WHERE email = 'giada1603@gmail.com')"
+              - column:
+                  name: role_id
+                  valueComputed: "(SELECT id FROM role WHERE name = 'ADMIN')"
+        - insert:
+            tableName: user_role
+            columns:
+              - column:
+                  name: user_id
+                  valueComputed: "(SELECT id FROM \"user\" WHERE email = 'alessio.blasi92@gmail.com')"
+              - column:
+                  name: role_id
+                  valueComputed: "(SELECT id FROM role WHERE name = 'VIEWER')"
+
+      rollback:
+        - delete:
+            tableName: user_role
+            where: "user_id IN (SELECT id FROM \"user\" WHERE email IN ('admin@example.com', 'giada1603@gmail.com', 'alessio.blasi92@gmail.com'))"
+        - delete:
+            tableName: "user"
+            where: "email IN ('admin@example.com', 'giada1603@gmail.com', 'alessio.blasi92@gmail.com')"

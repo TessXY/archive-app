@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3
+      author: giada
+      context: "seed"
+      changes:
+        - insert:
+            tableName: role
+            columns:
+              - column:
+                  name: name
+                  value: "ADMIN"
+        - insert:
+            tableName: role
+            columns:
+              - column:
+                  name: name
+                  value: "EDITOR"
+        - insert:
+            tableName: role
+            columns:
+              - column:
+                  name: name
+                  value: "VIEWER"
+      rollback:
+        - delete:
+            tableName: role
+            where: "name IN ('ADMIN', 'EDITOR', 'VIEWER')"

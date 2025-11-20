@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: giada
+      changes:
+        - sql:
+            sql: |
+              GRANT SELECT, INSERT, UPDATE, DELETE ON DATABASECHANGELOG TO giada;
+              GRANT SELECT, INSERT, UPDATE, DELETE ON DATABASECHANGELOGLOCK TO giada;
+      rollback:
+        - sql:
+            sql: |
+              REVOKE ALL PRIVILEGES ON DATABASECHANGELOG FROM giada;
+              REVOKE ALL PRIVILEGES ON DATABASECHANGELOGLOCK FROM giada;
